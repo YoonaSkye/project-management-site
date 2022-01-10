@@ -1,19 +1,19 @@
 import { NavLink } from "react-router-dom";
 
 // styles && images
-import styles from "./Sidebar.module.css";
+import styles from "./Sidebar.css";
 import Dashboard from "../assets/dashboard_icon.svg";
 import AddIcon from "../assets/add_icon.svg";
 
 export default function Sidebar() {
   return (
-    <div className={styles.sidebar}>
-      <div className={styles["sidebar-content"]}>
-        <div className={styles.user}>
+    <div className="sidebar">
+      <div className="sidebar-content">
+        <div className="user">
           {/* avatar & username here later */}
           <p>Hi user</p>
         </div>
-        <nav className={styles.links}>
+        <nav className="links">
           <ul>
             <li>
               <NavLink exact to="/">
