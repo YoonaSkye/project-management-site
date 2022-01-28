@@ -7,7 +7,6 @@ import Avatar from "./Avatar";
 
 export default function OnlineUsers() {
   const { documents, error } = useCollection("users");
-  console.log(documents);
 
   return (
     <div className="user-list">
