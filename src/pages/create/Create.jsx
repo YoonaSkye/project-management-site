@@ -19,6 +19,7 @@ export default function Create() {
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState("");
   const [assiignedUsers, setAssignedUsers] = useState([]);
+  const [formError, setFormError] = useState(null);
 
   const { documents } = useCollection("users");
   const [users, setUsers] = useState([]);
@@ -35,8 +36,20 @@ export default function Create() {
     }
   }, [documents]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError(null);
+
+    if (!category) {
+      setFormError("Please select a project category.");
+      return;
+    }
+
+    if (assiignedUsers.length < 1) {
+      setFormError("Please assign the project to at least 1 user");
+      return;
+    }
+
     console.log(name, details, dueDate, category.value, assiignedUsers);
   };
 
