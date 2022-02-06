@@ -3,7 +3,7 @@ import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 // styles && images
-import styles from "./Navbar.module.css";
+import "./Navbar.css";
 import Temple from "../assets/temple.svg";
 
 export default function Navbar() {
@@ -11,9 +11,9 @@ export default function Navbar() {
   const { user } = useAuthContext();
 
   return (
-    <nav className={styles.navbar}>
+    <nav className="navbar">
       <ul>
-        <li className={styles.logo}>
+        <li className="logo">
           <img src={Temple} alt="dojo logo" />
           <span>The Dojo</span>
         </li>
