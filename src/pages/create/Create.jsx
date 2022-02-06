@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useCollection } from "../../hooks/useCollection";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { useFirestore } from "../../hooks/useFirestore";
+import { timestamp } from "../../firebase/config";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./Create.css";
@@ -18,11 +22,14 @@ export default function Create() {
   const [details, setDetails] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState("");
-  const [assiignedUsers, setAssignedUsers] = useState([]);
+  const [assignedUsers, setAssignedUsers] = useState([]);
   const [formError, setFormError] = useState(null);
 
   const { documents } = useCollection("users");
+  const { user } = useAuthContext();
   const [users, setUsers] = useState([]);
+  const { addDocument, response } = useFirestore("projects");
+  const history = useHistory();
 
   // create users options for react-select
   useEffect(() => {
@@ -45,12 +52,38 @@ export default function Create() {
       return;
     }
 
-    if (assiignedUsers.length < 1) {
+    if (assignedUsers.length < 1) {
       setFormError("Please assign the project to at least 1 user");
       return;
     }
 
-    console.log(name, details, dueDate, category.value, assiignedUsers);
+    const assignedUsersList = assignedUsers.map((u) => {
+      return {
+        displayName: u.value.displayName,
+        photoURL: u.value.photoURL,
+        id: u.value.id,
+      };
+    });
+    const createdBy = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      id: user.uid,
+    };
+
+    const project = {
+      name,
+      details,
+      category: category.value,
+      dueDate: timestamp.fromDate(new Date(dueDate)),
+      assignedUsersList,
+      createdBy,
+      comments: [],
+    };
+
+    await addDocument(project);
+    if (!response.error) {
+      history.push("/");
+    }
   };
 
   return (
