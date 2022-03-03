@@ -87,9 +87,26 @@ export const useFirestore = (collection) => {
     }
   };
 
+  // update a document
+  const updateDocument = async (id, updates) => {
+    dispatch({ type: "IS_PENDING" });
+
+    try {
+      const updatedDocument = await ref.doc(id).update(updates);
+      dispatchIfNotCancelled({
+        type: "UPDATED_DOCUMENT",
+        payload: updatedDocument,
+      });
+      return updatedDocument;
+    } catch (error) {
+      dispatchIfNotCancelled({ type: "ERROR", payload: error });
+      return null;
+    }
+  };
+
   useEffect(() => {
     return () => setIsCancelled(true);
   }, []);
 
-  return { addDocument, deleteDocument, response };
+  return { addDocument, deleteDocument, updateDocument, response };
 };
